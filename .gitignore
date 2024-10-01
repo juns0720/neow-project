@@ -1,0 +1,13 @@
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+
+### VS Code ###
+.vscode/
+
+### properties ###
+src/main/resources/application.properties
