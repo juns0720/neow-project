@@ -15,9 +15,11 @@ public class FinalRelic {
     private Long id;
 
     @ManyToOne(fetch = LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "relic_id")
     private Relic relic;
 
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "game_id")
     private Game game;
 }

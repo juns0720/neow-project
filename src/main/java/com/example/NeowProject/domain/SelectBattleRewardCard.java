@@ -12,7 +12,7 @@ import static jakarta.persistence.FetchType.LAZY;
 public class SelectBattleRewardCard {
 
     @Id @GeneratedValue
-    @Column(name="select_battle_reward_card")
+    @Column(name="select_battle_reward_card_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY,cascade = CascadeType.ALL)

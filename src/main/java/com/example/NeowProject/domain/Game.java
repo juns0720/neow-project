@@ -23,7 +23,6 @@ public class Game {
     @JoinColumn(name = "member_id")
     private Member member;
 
-
     private String gameUUID;
 
     private boolean isVictory;
@@ -36,11 +35,12 @@ public class Game {
 
     private Time playTime;
 
-    private int asccensionLevel;
+    private int ascension;
 
     private int score;
 
-    private Character charactor;
+    @Enumerated(EnumType.STRING)
+    private Character character;
 
 
 }

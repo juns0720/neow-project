@@ -9,7 +9,7 @@ import static jakarta.persistence.FetchType.*;
 @Entity
 @Getter@Setter
 public class EventEncounter {
-    @Id @GeneratedValue()
+    @Id @GeneratedValue
     @Column(name = "event_encounter_id")
     private long id;
 

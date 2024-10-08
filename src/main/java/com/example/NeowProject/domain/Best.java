@@ -16,15 +16,15 @@ public class Best {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private int maxAscensionLevel;
+    private int maxAscension;
 
     private Double winRate;
 
-    private int mostWinningStreak;
+    private int maxStreak;
 
     private int minTime;
 
     private int bestScore;
-
+    @Enumerated(EnumType.STRING)
     private Character character;
 }
