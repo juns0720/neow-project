@@ -1,6 +1,6 @@
 package com.example.NeowProject.domain;
 
 
-public enum Character {
+public enum CharacterType {
     IRONCLAD, SILENT, DEFECT, WATCHER
 }

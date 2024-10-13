@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Entity
 @Getter@Setter
-public class Best {
+public class BestRecord {
 
     @Id@GeneratedValue
     @Column(name = "best_id")
@@ -25,6 +25,7 @@ public class Best {
     private int minTime;
 
     private int bestScore;
+
     @Enumerated(EnumType.STRING)
-    private Character character;
+    private CharacterType characterType;
 }

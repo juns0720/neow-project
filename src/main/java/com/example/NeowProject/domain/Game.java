@@ -7,8 +7,6 @@ import lombok.Setter;
 
 import java.sql.Time;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -40,7 +38,7 @@ public class Game {
     private int score;
 
     @Enumerated(EnumType.STRING)
-    private Character character;
+    private CharacterType characterType;
 
 
 }
