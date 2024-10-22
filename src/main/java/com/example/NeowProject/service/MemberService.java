@@ -31,7 +31,7 @@ public class MemberService {
     }
 
     private void validateDuplicatemember(Member member) {
-        List<Member> findMembers = memberRepository.findByName(member.getName());
+        List<Member> findMembers = memberRepository.findAllByName(member.getName());
         if (!findMembers.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
@@ -61,11 +61,11 @@ public class MemberService {
         return bestRecord.getId();
     }
 
-    public BestRecord findOneBestRecords(Member member, CharacterType characterType) {
+    public BestRecord findBestRecordByMemberAndCharacterType(Member member, CharacterType characterType) {
         return bestRecordRepository.findOneByMemberAndCharacterType(member, characterType);
     }
 
-    public List<BestRecord> findAllBestRecords(Member member) {
+    public List<BestRecord> findBestRecordsByMember(Member member) {
         return bestRecordRepository.findAllByMember(member);
     }
 
