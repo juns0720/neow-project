@@ -6,55 +6,49 @@ import com.example.NeowProject.domain.CharacterType;
 import com.example.NeowProject.domain.Member;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 
 @Repository
-@RequiredArgsConstructor
-public class MemberRepository {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    private final EntityManager em;
-
-    // Member 계층
-    public void saveMember(Member member){
-        em.persist(member);
-    }
-
-    public Member findOneMember(Long id){
-        return em.find(Member.class, id);
-    }
-
-
-    public List<Member> findAllMembers(){
-        return em.createQuery("select m from Member m", Member.class).getResultList();
-    }
-
-    public List<Member> findMemberByName(String name){
-        return em.createQuery(" select m from Member m where m.name = :name", Member.class).setParameter("name", name).getResultList();
-    }
+    List<Member> findByName(String name);
 
 
 
-    // BestRecord 계층
-    public void saveBestRecord(BestRecord bestRecord){
-        em.persist(bestRecord);
-    }
 
-    public BestRecord findOneBestRecord(Member member, CharacterType characterType){
-        return em.createQuery("select b from BestRecord b " +
-                        "where b.member = :member and b.characterType = :character", BestRecord.class)
-                .setParameter("member", member)
-                .setParameter("character", characterType)
-                .getSingleResult();
-    }
 
-    public List<BestRecord> findAllBestRecord(Member member){
-        return em.createQuery("select b from BestRecord b where b.member = :member", BestRecord.class)
-                .setParameter("member", member)
-                .getResultList();
-    }
+
+
+
+
+
+
+
+
+//
+//
+//    private final EntityManager em;
+//
+//    // Member 계층
+//    public void saveMember(Member member){
+//        em.persist(member);
+//    }
+//
+
+//
+//
+//
+//    public List<Member> findMemberByName(String name){
+//        return em.createQuery(" select m from Member m where m.name = :name", Member.class).setParameter("name", name).getResultList();
+//    }
+//
+//
+//
+
 
 
 

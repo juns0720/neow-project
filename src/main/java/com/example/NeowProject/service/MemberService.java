@@ -3,7 +3,7 @@ package com.example.NeowProject.service;
 import com.example.NeowProject.domain.BestRecord;
 import com.example.NeowProject.domain.CharacterType;
 import com.example.NeowProject.domain.Member;
-import com.example.NeowProject.dto.BestRecordUpdateDto;
+import com.example.NeowProject.repository.BestRecordRepository;
 import com.example.NeowProject.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,32 +15,34 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final BestRecordRepository bestRecordRepository;
 
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository, BestRecordRepository bestRecordRepository) {
         this.memberRepository = memberRepository;
+        this.bestRecordRepository = bestRecordRepository;
     }
 
     // Member 기능
     @Transactional
     public Long join(Member member) {
         validateDuplicatemember(member);
-        memberRepository.saveMember(member);
+        memberRepository.save(member);
         return member.getId();
     }
 
     private void validateDuplicatemember(Member member) {
-        List<Member> findMembers = memberRepository.findMemberByName(member.getName());
+        List<Member> findMembers = memberRepository.findByName(member.getName());
         if (!findMembers.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
     }
 
     public Member findOneMember(Long memberId) {
-        return memberRepository.findOneMember(memberId);
+        return memberRepository.findById(memberId).get();
     }
 
     public List<Member> findAllMembers() {
-        return memberRepository.findAllMembers();
+        return memberRepository.findAll();
     }
 
     /**
@@ -55,40 +57,17 @@ public class MemberService {
 
     @Transactional
     public Long saveBestRecord(BestRecord bestRecord) {
-        memberRepository.saveBestRecord(bestRecord);
+        bestRecordRepository.save(bestRecord);
         return bestRecord.getId();
     }
 
     public BestRecord findOneBestRecords(Member member, CharacterType characterType) {
-        return memberRepository.findOneBestRecord(member, characterType);
+        return bestRecordRepository.findOneByMemberAndCharacterType(member, characterType);
     }
 
     public List<BestRecord> findAllBestRecords(Member member) {
-        return memberRepository.findAllBestRecord(member);
+        return bestRecordRepository.findAllByMember(member);
     }
-
-    @Transactional
-    public void updateBestRecord(Member member, CharacterType characterType, BestRecordUpdateDto dto) {
-        BestRecord bestRecord = memberRepository.findOneBestRecord(member, characterType);
-
-        if (dto.getMaxAscension() != null) {
-            bestRecord.setMaxAscension(dto.getMaxAscension());
-        }
-        if (dto.getWinRate() != null) {
-            bestRecord.setWinRate(dto.getWinRate());
-        }
-        if (dto.getMaxStreak() != null) {
-            bestRecord.setMaxStreak(dto.getMaxStreak());
-        }
-        if (dto.getMinTime() != null) {
-            bestRecord.setMinTime(dto.getMinTime());
-        }
-        if (dto.getBestScore() != null) {
-            bestRecord.setBestScore(dto.getBestScore());
-        }
-    }
-
-
 
 
 }
