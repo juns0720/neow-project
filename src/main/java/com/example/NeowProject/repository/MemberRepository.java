@@ -19,39 +19,4 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 
 
-
-
-
-
-
-
-
-
-
-
-//
-//
-//    private final EntityManager em;
-//
-//    // Member 계층
-//    public void saveMember(Member member){
-//        em.persist(member);
-//    }
-//
-
-//
-//
-//
-//    public List<Member> findMemberByName(String name){
-//        return em.createQuery(" select m from Member m where m.name = :name", Member.class).setParameter("name", name).getResultList();
-//    }
-//
-//
-//
-
-
-
-
-
-
 }
