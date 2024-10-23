@@ -17,10 +17,10 @@ public class EnemyService {
         this.enemyRepository = enemyRepository;
     }
 
-    private Long save(Enemy enemy){
+    public Long save(Enemy enemy){
         enemyRepository.save(enemy);
         return enemy.getId();
-    }
+}
 
     public Enemy findOneByName(String name){
         return enemyRepository.findByName(name);
