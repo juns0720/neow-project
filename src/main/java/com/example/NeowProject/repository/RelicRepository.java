@@ -11,8 +11,8 @@ import java.util.Optional;
 @Repository
 public interface RelicRepository extends JpaRepository<Relic, Long> {
 
-    public Optional<Relic> findByName(Long id);
+    public Optional<Relic> findByName(String name);
 
-    public Optional<Relic> findByType(RelicType type);
+    public List<Relic> findRelicsByRelicType(RelicType type);
 
 }
