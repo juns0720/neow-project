@@ -1,22 +1,19 @@
 package com.example.NeowProject.repository;
 
-
 import com.example.NeowProject.domain.BestRecord;
 import com.example.NeowProject.domain.CharacterType;
 import com.example.NeowProject.domain.Member;
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @Repository
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface BestRecordRepository extends JpaRepository<BestRecord, Long> {
 
-    List<Member> findAllByName(String name);
+    BestRecord findOneByMemberAndCharacterType(Member member, CharacterType characterType);
 
+    List<BestRecord> findAllByMember(Member member);
 
 
 }
