@@ -215,7 +215,7 @@ public class FileService {
             String pickedRelicName  = bossRelicNode.get("picked").asText();
 
             if (!"SKIP".equalsIgnoreCase(pickedRelicName)) {
-                Relic pickedRelic = relicRepository.findByName(pickedRelicName).orElseThrow(() -> new CustomException(RELIC_NOT_FOUND));;
+                Relic pickedRelic = relicRepository.findByName(pickedRelicName).orElseThrow(() -> new CustomException(RELIC_NOT_FOUND));
 
                 SelectBossRelic selectedRelic = new SelectBossRelic();
                 selectedRelic.setGame(game);
