@@ -18,4 +18,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
     List<Card> findCardsByColor(Color color);
 
+    Card findByName(String name);
+
 }
