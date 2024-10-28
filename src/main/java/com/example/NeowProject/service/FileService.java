@@ -238,6 +238,24 @@ public class FileService {
         }
     }
 
+    @Transactional
+    public void deleteGameData(String playId) {
+        Game game = gameRepository.findByGameUUID(playId).orElseThrow(() -> new CustomException(GAME_NOT_FOUND));
+        //cascade 형태로 게임 관련 테이블 전부 삭제
+        gameRepository.delete(game);
+
+        String filePath = "src/main/resources/uploads/" + playId + ".json";
+        File file = new File(filePath);
+
+        if (file.exists()) {
+            if (!file.delete()) {
+                throw new CustomException(FILE_DELETE_FAILED);
+            }
+        } else {
+            throw new CustomException(FILE_NOT_FOUND);
+        }
+    }
+
     public String findCauseOfDeathByFloor(JsonNode gameData, int targetFloor) {
         JsonNode damageTakenArray = gameData.get("damage_taken");
         //적으로 인해서 죽었을 경우 이것을 반환
