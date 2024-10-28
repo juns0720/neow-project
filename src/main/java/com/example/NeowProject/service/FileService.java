@@ -226,7 +226,7 @@ public class FileService {
 
                 for (JsonNode notPickedNode : bossRelicNode.get("not_picked")) {
                     String notPickedRelicName = notPickedNode.asText();
-                    Relic notPickedRelic = relicRepository.findByName(notPickedRelicName).orElseThrow(() -> new CustomException(RELIC_NOT_FOUND));;
+                    Relic notPickedRelic = relicRepository.findByName(notPickedRelicName).orElseThrow(() -> new CustomException(RELIC_NOT_FOUND));
 
                     SelectBossRelic unselectedRelic = new SelectBossRelic();
                     unselectedRelic.setGame(game);
