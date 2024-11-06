@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -31,7 +31,7 @@ public class Game {
 
     private String defeatedBy;
 
-    private Time playTime;
+    private LocalTime playTime;
 
     private int ascension;
 
