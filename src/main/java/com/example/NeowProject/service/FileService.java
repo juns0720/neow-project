@@ -84,7 +84,7 @@ public class FileService {
 
     @Transactional
     public void saveGameData(String play_id, Member member) {
-        //game 테이블에 필요한 데이터 가공
+        //game 데이터 저장
         JsonNode gameData = loadJsonFile(play_id);
         boolean isVictory = gameData.get("victory").asBoolean();
         int finalFloor = gameData.get("floor_reached").asInt();
@@ -98,7 +98,6 @@ public class FileService {
         int score = gameData.get("score").asInt();
         CharacterType characterType = convertStringToCharacterType(gameData.get("character_chosen").asText());
 
-        //game 데이터 저장
         Game game = new Game();
         game.setMember(member);
         game.setGameUUID(play_id);
@@ -167,7 +166,7 @@ public class FileService {
             int floor = cardChoiceNode.get("floor").asInt();
 
             if (!"SKIP".equalsIgnoreCase(pickedCardName)) {
-                Card pickedCard = cardRepository.findByName(pickedCardName);
+                Card pickedCard = cardRepository.findByName(removeNumberCardName(pickedCardName));
                 if (pickedCard == null) {
                     throw new IllegalArgumentException("Card not found: " + pickedCardName);
                 }
@@ -182,7 +181,7 @@ public class FileService {
 
             for (JsonNode notPickedNode : cardChoiceNode.get("not_picked")) {
                 String notPickedCardName = notPickedNode.asText();
-                Card notPickedCard = cardRepository.findByName(notPickedCardName);
+                Card notPickedCard = cardRepository.findByName(removeNumberCardName(pickedCardName));
                 if (notPickedCard == null) {
                     throw new IllegalArgumentException("Card not found: " + notPickedCardName);
                 }
@@ -305,5 +304,13 @@ public class FileService {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid character type: " + value);
         }
+    }
+
+    private String removeNumberCardName(String cardName) {
+        int plusIndex = cardName.indexOf('+');
+        if (plusIndex != -1) {
+            return cardName.substring(0, plusIndex + 1);
+        }
+        return cardName;
     }
 }
