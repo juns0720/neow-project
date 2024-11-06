@@ -9,7 +9,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class playRecordsResponse {
+public class PlayRecordsResponse {
     private List<GameRecord> records;
 
     @Getter
