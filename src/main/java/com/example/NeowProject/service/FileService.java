@@ -245,6 +245,11 @@ public class FileService {
     public void deleteGameData(String playId) {
         Game game = gameRepository.findByGameUUID(playId).orElseThrow(() -> new CustomException(GAME_NOT_FOUND));
         //cascade 형태로 게임 관련 테이블 전부 삭제
+        battleRepository.deleteByGame(game);
+        finalCardRepository.deleteByGame(game);
+        finalRelicRepository.deleteByGame(game);
+        selectBossRelicRepository.deleteByGame(game);
+        selectedCardRewordRepository.deleteByGame(game);
         gameRepository.delete(game);
 
         String filePath = "src/main/resources/uploads/" + playId + ".json";
