@@ -49,12 +49,12 @@ public class FileService {
         this.selectBossRelicRepository = selectBossRelicRepository;
     }
 
-    public void saveJsonFile(MultipartFile file, Member member) {
+    public String saveJsonFile(MultipartFile file) {
+
         try {
             JsonNode jsonNode = objectMapper.readTree(file.getInputStream());
 
             String playId = jsonNode.get("play_id").asText();
-
             Path resourceDirectory = Paths.get("src", "main", "resources", "uploads");
             if (!Files.exists(resourceDirectory)) {
                 Files.createDirectories(resourceDirectory); // 폴더가 없을 경우 생성
@@ -62,9 +62,13 @@ public class FileService {
             Path filePath = resourceDirectory.resolve(playId + ".json");
 
             Files.write(filePath, file.getBytes());
+
+            return playId;
         } catch (IOException e) {
             throw new CustomException(FILE_SAVE_FAILED);
         }
+
+
     }
 
     public JsonNode loadJsonFile(String playId) {

@@ -3,6 +3,7 @@ package com.example.NeowProject;
 import com.example.NeowProject.domain.*;
 import com.example.NeowProject.repository.CardRepository;
 import com.example.NeowProject.repository.EnemyRepository;
+import com.example.NeowProject.repository.MemberRepository;
 import com.example.NeowProject.repository.RelicRepository;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -23,15 +24,22 @@ public class CsvDataLoader implements CommandLineRunner {
     private RelicRepository relicRepository;
     @Autowired
     private EnemyRepository enemyRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Override
     public void run(String... args) throws Exception {
         loadCsvCardData();
         loadCsvRelicData();
         loadCsvEnemyData();
+        loadMember();
     }
 
-
+    private void loadMember() {
+        Member member = new Member();
+        member.setName("Um");
+        memberRepository.save(member);
+    }
     private void loadCsvCardData() {
         try (CSVReader reader = new CSVReader(new FileReader(new ClassPathResource("data/card_data.csv").getFile()))) {
             String[] line;
