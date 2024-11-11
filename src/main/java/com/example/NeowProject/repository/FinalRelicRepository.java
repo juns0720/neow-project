@@ -9,5 +9,7 @@ import java.util.List;
 
 @Repository
 public interface FinalRelicRepository extends JpaRepository<FinalRelic, Long> {
+    void deleteByGame(Game game);
+  
     List<FinalRelic> findByGame(Game game);
 }

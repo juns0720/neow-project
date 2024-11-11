@@ -9,5 +9,7 @@ import java.util.List;
 
 @Repository
 public interface FinalCardRepository extends JpaRepository<FinalCard, Long> {
+    void deleteByGame(Game game);
+
     List<FinalCard> findByGame(Game game);
 }

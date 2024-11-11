@@ -49,12 +49,12 @@ public class FileService {
         this.selectBossRelicRepository = selectBossRelicRepository;
     }
 
-    public void saveJsonFile(MultipartFile file, Member member) {
+    public String saveJsonFile(MultipartFile file) {
+
         try {
             JsonNode jsonNode = objectMapper.readTree(file.getInputStream());
 
             String playId = jsonNode.get("play_id").asText();
-
             Path resourceDirectory = Paths.get("src", "main", "resources", "uploads");
             if (!Files.exists(resourceDirectory)) {
                 Files.createDirectories(resourceDirectory); // 폴더가 없을 경우 생성
@@ -62,9 +62,13 @@ public class FileService {
             Path filePath = resourceDirectory.resolve(playId + ".json");
 
             Files.write(filePath, file.getBytes());
+
+            return playId;
         } catch (IOException e) {
             throw new CustomException(FILE_SAVE_FAILED);
         }
+
+
     }
 
     public JsonNode loadJsonFile(String playId) {
@@ -146,7 +150,7 @@ public class FileService {
             int count = entry.getValue();
 
             // 카드 이름으로 조회하여 Card 엔티티 찾기
-            Card card = cardRepository.findByName(cardName);
+            Card card = cardRepository.findByName(removeNumberCardName(cardName));
             if (card == null) {
                 throw new IllegalArgumentException("Card not found: " + cardName);
             }
@@ -181,7 +185,7 @@ public class FileService {
 
             for (JsonNode notPickedNode : cardChoiceNode.get("not_picked")) {
                 String notPickedCardName = notPickedNode.asText();
-                Card notPickedCard = cardRepository.findByName(removeNumberCardName(pickedCardName));
+                Card notPickedCard = cardRepository.findByName(removeNumberCardName(notPickedCardName));
                 if (notPickedCard == null) {
                     throw new IllegalArgumentException("Card not found: " + notPickedCardName);
                 }
@@ -241,6 +245,11 @@ public class FileService {
     public void deleteGameData(String playId) {
         Game game = gameRepository.findByGameUUID(playId).orElseThrow(() -> new CustomException(GAME_NOT_FOUND));
         //cascade 형태로 게임 관련 테이블 전부 삭제
+        battleRepository.deleteByGame(game);
+        finalCardRepository.deleteByGame(game);
+        finalRelicRepository.deleteByGame(game);
+        selectBossRelicRepository.deleteByGame(game);
+        selectedCardRewordRepository.deleteByGame(game);
         gameRepository.delete(game);
 
         String filePath = "src/main/resources/uploads/" + playId + ".json";
