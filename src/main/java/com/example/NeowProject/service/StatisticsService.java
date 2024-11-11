@@ -82,7 +82,7 @@ public class StatisticsService {
                     new CardDataResponse.ActPickedRate(3, act3PickedRate)
             );
 
-            CardDataResponse response = new CardDataResponse(card.getId(), totalPickedRate, totalWinRate, actPickedRates);
+            CardDataResponse response = new CardDataResponse(card.getId(), card.getName(), totalPickedRate, totalWinRate, actPickedRates);
             cardDataResponses.add(response);
         }
 
@@ -118,4 +118,6 @@ public class StatisticsService {
 
         return new RelicDataResponse(bossRelics, otherRelics);
     }
+
+
 }

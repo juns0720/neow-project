@@ -12,6 +12,8 @@ public class CardDataResponse {
     @JsonProperty("card_id")
     private Long cardId;
 
+    private String name;
+
     @JsonProperty("total_picked_rate")
     private double totalPickedRate;
 
