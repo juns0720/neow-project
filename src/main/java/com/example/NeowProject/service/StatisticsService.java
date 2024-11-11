@@ -1,10 +1,9 @@
 package com.example.NeowProject.service;
 
-import com.example.NeowProject.domain.Card;
-import com.example.NeowProject.domain.CharacterType;
-import com.example.NeowProject.domain.Color;
+import com.example.NeowProject.domain.*;
 import com.example.NeowProject.dto.response.CardDataResponse;
 import com.example.NeowProject.dto.response.CharacterDataResponse;
+import com.example.NeowProject.dto.response.RelicDataResponse;
 import com.example.NeowProject.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +21,8 @@ public class StatisticsService {
     private final FinalRelicRepository finalRelicRepository;
     private final CardRepository cardRepository;
     private final SelectedCardRewordRepository selectedCardRewordRepository;
+    private final RelicRepository relicRepository;
+    private final SelectBossRelicRepository selectBossRelicRepository;
 
     public CharacterDataResponse getCharacterData(CharacterType characterType) {
         long totalGames = gameRepository.count();
@@ -86,5 +87,35 @@ public class StatisticsService {
         }
 
         return cardDataResponses;
+    }
+
+    public RelicDataResponse getRelicData() {
+        List<RelicDataResponse.RelicDto> bossRelics = new ArrayList<>();
+        List<RelicDataResponse.RelicWinRateDto> otherRelics = new ArrayList<>();
+
+        List<Relic> bossRelicList = relicRepository.findRelicsByRelicType(RelicType.BOSS);
+        for (Relic relic : bossRelicList) {
+            long totalPicked = selectBossRelicRepository.countByRelic(relic);
+            long totalSelected = selectBossRelicRepository.countByRelicAndSelectTrue(relic);
+            double pickRate = totalPicked == 0 ? 0.0 : (double) totalSelected / totalPicked * 100;
+
+            long totalRelicCount = finalRelicRepository.countByRelic(relic);
+            long victoryCount = finalRelicRepository.countByRelicAndGameVictoryTrue(relic);
+            double winRate = totalRelicCount == 0 ? 0.0 : (double) victoryCount / totalRelicCount * 100;
+
+            bossRelics.add(new RelicDataResponse.RelicDto(relic.getId(), relic.getName(), winRate, pickRate));
+        }
+
+        // Other Relics
+        List<Relic> otherRelicList = relicRepository.findRelicsByRelicTypeNot(RelicType.BOSS);
+        for (Relic relic : otherRelicList) {
+            long totalRelicCount = finalRelicRepository.countByRelic(relic);
+            long victoryCount = finalRelicRepository.countByRelicAndGameVictoryTrue(relic);
+            double winRate = totalRelicCount == 0 ? 0.0 : (double) victoryCount / totalRelicCount * 100;
+
+            otherRelics.add(new RelicDataResponse.RelicWinRateDto(relic.getId(), relic.getName(), winRate));
+        }
+
+        return new RelicDataResponse(bossRelics, otherRelics);
     }
 }

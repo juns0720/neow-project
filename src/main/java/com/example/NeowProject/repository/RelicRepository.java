@@ -15,4 +15,5 @@ public interface RelicRepository extends JpaRepository<Relic, Long> {
 
     public List<Relic> findRelicsByRelicType(RelicType type);
 
+    public List<Relic> findRelicsByRelicTypeNot(RelicType type);
 }
