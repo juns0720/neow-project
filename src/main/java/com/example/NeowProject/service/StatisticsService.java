@@ -1,10 +1,9 @@
 package com.example.NeowProject.service;
 
 import com.example.NeowProject.domain.*;
-import com.example.NeowProject.dto.response.CardDataResponse;
-import com.example.NeowProject.dto.response.CharacterDataResponse;
-import com.example.NeowProject.dto.response.EnemyDataResponse;
-import com.example.NeowProject.dto.response.RelicDataResponse;
+import com.example.NeowProject.dto.response.*;
+import com.example.NeowProject.exception.CustomException;
+import com.example.NeowProject.exception.ErrorCode;
 import com.example.NeowProject.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +25,7 @@ public class StatisticsService {
     private final RelicRepository relicRepository;
     private final SelectBossRelicRepository selectBossRelicRepository;
     private final EnemyRepository enemyRepository;
+    private final CardAndCardSynergyRepository cardAndCardSynergyRepository;
 
     public CharacterDataResponse getCharacterData(CharacterType characterType) {
         long totalGames = gameRepository.count();
@@ -135,5 +136,15 @@ public class StatisticsService {
         }
 
         return enemyDataResponses;
+    }
+
+    public CardSynergyDataResponse getCardSynergyData(Long cardId1, Long cardId2) {
+        Card card1 = cardRepository.findById(cardId1).orElseThrow(() -> new CustomException(ErrorCode.CARD_NOT_FOUND));
+        Card card2 = cardRepository.findById(cardId2).orElseThrow(() -> new CustomException(ErrorCode.CARD_NOT_FOUND));
+
+        Optional<CardAndCardSynergy> cardAndCardSynergy  = cardAndCardSynergyRepository.findByCard1AndCard2(card1, card2);
+        Double synergyValue = cardAndCardSynergy.map(CardAndCardSynergy::getSynergy).orElse(null);
+
+        return new CardSynergyDataResponse(card1.getId(), card2.getId(), synergyValue);
     }
 }

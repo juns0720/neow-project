@@ -8,11 +8,11 @@ import lombok.Getter;
 @Getter
 public class CardSynergyDataResponse {
     @JsonProperty("card1_id")
-    private int card1Id;
+    private long card1Id;
 
     @JsonProperty("card2_id")
-    private int card2Id;
+    private long card2Id;
 
     @JsonProperty("synergy_value")
-    private double synergyValue;
+    private Double synergyValue;
 }

@@ -2,10 +2,7 @@ package com.example.NeowProject.controller;
 
 import com.example.NeowProject.domain.CharacterType;
 import com.example.NeowProject.domain.Color;
-import com.example.NeowProject.dto.response.CardDataResponse;
-import com.example.NeowProject.dto.response.CharacterDataResponse;
-import com.example.NeowProject.dto.response.EnemyDataResponse;
-import com.example.NeowProject.dto.response.RelicDataResponse;
+import com.example.NeowProject.dto.response.*;
 import com.example.NeowProject.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,5 +43,11 @@ public class StatisticsController {
     public ResponseEntity<?> getDeathData() {
         List<EnemyDataResponse> enemyData = statisticsService.getEnemyData();
         return ResponseEntity.status(HttpStatus.OK).body(enemyData);
+    }
+
+    @GetMapping("/synergy")
+    public ResponseEntity<?> getCardSynergy(@RequestParam("card_id1") Long card1Id, @RequestParam("card_id2") Long card2Id) {
+        CardSynergyDataResponse cardSynergyData = statisticsService.getCardSynergyData(card1Id, card2Id);
+        return ResponseEntity.status(HttpStatus.OK).body(cardSynergyData);
     }
 }
