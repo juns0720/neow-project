@@ -26,6 +26,7 @@ public class StatisticsService {
     private final SelectBossRelicRepository selectBossRelicRepository;
     private final EnemyRepository enemyRepository;
     private final CardAndCardSynergyRepository cardAndCardSynergyRepository;
+    private final CardAndRelicSynergyRepository cardAndRelicSynergyRepository;
 
     public CharacterDataResponse getCharacterData(CharacterType characterType) {
         long totalGames = gameRepository.count();
@@ -146,5 +147,15 @@ public class StatisticsService {
         Double synergyValue = cardAndCardSynergy.map(CardAndCardSynergy::getSynergy).orElse(null);
 
         return new CardSynergyDataResponse(card1.getId(), card2.getId(), synergyValue);
+    }
+
+    public CardAndRelicSynergyDataResponse getCardAndRelicSynergyData(Long cardId, Long relicId) {
+        Card card = cardRepository.findById(cardId).orElseThrow(() -> new CustomException(ErrorCode.CARD_NOT_FOUND));
+        Relic relic = relicRepository.findById(relicId).orElseThrow(() -> new CustomException(ErrorCode.RELIC_NOT_FOUND));
+
+        Optional<CardAndRelicSynergy> cardAndRelicSynergy = cardAndRelicSynergyRepository.findByCardAndRelic(card, relic);
+        Double synergyValue = cardAndRelicSynergy.map(CardAndRelicSynergy::getSynergy).orElse(null);
+
+        return new CardAndRelicSynergyDataResponse(card.getId(), relic.getId(), synergyValue);
     }
 }

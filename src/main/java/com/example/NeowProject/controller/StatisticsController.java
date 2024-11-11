@@ -45,9 +45,15 @@ public class StatisticsController {
         return ResponseEntity.status(HttpStatus.OK).body(enemyData);
     }
 
-    @GetMapping("/synergy")
+    @GetMapping("/card-synergy")
     public ResponseEntity<?> getCardSynergy(@RequestParam("card_id1") Long card1Id, @RequestParam("card_id2") Long card2Id) {
         CardSynergyDataResponse cardSynergyData = statisticsService.getCardSynergyData(card1Id, card2Id);
         return ResponseEntity.status(HttpStatus.OK).body(cardSynergyData);
+    }
+
+    @GetMapping("/synergy")
+    public ResponseEntity<?> getCardAndRelicSynergy(@RequestParam("card_id") Long cardId, @RequestParam("relic_id") Long relicId) {
+        CardAndRelicSynergyDataResponse cardAndRelicSynergyData = statisticsService.getCardAndRelicSynergyData(cardId, relicId);
+        return ResponseEntity.status(HttpStatus.OK).body(cardAndRelicSynergyData);
     }
 }
