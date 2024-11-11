@@ -115,6 +115,7 @@ public class FileService {
         game.setCharacterType(characterType);
         gameRepository.save(game);
 
+
         //전투 테이블 저장
         JsonNode damageTakenData = gameData.get("damage_taken");
         for (JsonNode battleNode : damageTakenData) {
