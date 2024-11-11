@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Time;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,7 +97,7 @@ public class FileService {
         if(!isVictory) {
             defeatedBy = findCauseOfDeathByFloor(gameData, finalFloor);
         }
-        Time playTime = convertPlaytimeToTime(gameData.get("playtime").asInt());
+        LocalTime playTime = convertPlaytimeToTime(gameData.get("playtime").asInt());
         int ascension = gameData.get("ascension_level").asInt();
         int score = gameData.get("score").asInt();
         CharacterType characterType = convertStringToCharacterType(gameData.get("character_chosen").asText());
@@ -291,9 +291,8 @@ public class FileService {
         return LocalDateTime.parse(localTime, formatter);
     }
 
-    public static Time convertPlaytimeToTime(int playtimeInSeconds) {
-        long millis = playtimeInSeconds * 1000L;
-        return new Time(millis);
+    public static LocalTime convertPlaytimeToTime(int playtimeInSeconds) {
+        return LocalTime.ofSecondOfDay(playtimeInSeconds);
     }
 
     public static CharacterType convertStringToCharacterType(String value) {
