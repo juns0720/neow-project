@@ -3,6 +3,7 @@ package com.example.NeowProject.service;
 import com.example.NeowProject.domain.*;
 import com.example.NeowProject.dto.response.CardDataResponse;
 import com.example.NeowProject.dto.response.CharacterDataResponse;
+import com.example.NeowProject.dto.response.EnemyDataResponse;
 import com.example.NeowProject.dto.response.RelicDataResponse;
 import com.example.NeowProject.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class StatisticsService {
     private final SelectedCardRewordRepository selectedCardRewordRepository;
     private final RelicRepository relicRepository;
     private final SelectBossRelicRepository selectBossRelicRepository;
+    private final EnemyRepository enemyRepository;
 
     public CharacterDataResponse getCharacterData(CharacterType characterType) {
         long totalGames = gameRepository.count();
@@ -119,5 +121,19 @@ public class StatisticsService {
         return new RelicDataResponse(bossRelics, otherRelics);
     }
 
+    public List<EnemyDataResponse> getEnemyData() {
+        List<EnemyDataResponse> enemyDataResponses = new ArrayList<>();
 
+        long totalDefeats = gameRepository.countByVictoryFalse();
+
+        List<Enemy> enemies = enemyRepository.findAll();
+        for (Enemy enemy : enemies) {
+            long defeatedByEnemyCount = gameRepository.countByDefeatedByAndVictoryFalse(enemy.getName());
+            double deathRate = totalDefeats == 0 ? 0.0 : (double) defeatedByEnemyCount / totalDefeats * 100;
+
+            enemyDataResponses.add(new EnemyDataResponse(enemy.getName(), deathRate));
+        }
+
+        return enemyDataResponses;
+    }
 }

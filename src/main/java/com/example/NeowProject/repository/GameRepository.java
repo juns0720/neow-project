@@ -17,9 +17,14 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     List<Game> findGamesByMemberAndCharacterType(Member member, CharacterType characterType);
 
+    //통계 관련 메소드
     long countByCharacterTypeAndAscension(CharacterType characterType, int ascension);
 
     long countByCharacterTypeAndAscensionAndVictoryTrue(CharacterType characterType, int ascension);
 
     long countByCharacterType(CharacterType characterType);
+
+    long countByVictoryFalse();
+
+    long countByDefeatedByAndVictoryFalse(String defeatedBy);
 }
