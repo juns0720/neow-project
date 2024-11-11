@@ -150,7 +150,9 @@ public class FileService {
             int count = entry.getValue();
 
             // 카드 이름으로 조회하여 Card 엔티티 찾기
-            Card card = cardRepository.findByName(removeNumberCardName(cardName));
+            Card card = cardRepository.findByName(removeNumberCardName(cardName)).orElseThrow(
+                    () -> new CustomException(CARD_NOT_FOUND)
+            );
             if (card == null) {
                 throw new IllegalArgumentException("Card not found: " + cardName);
             }
@@ -170,7 +172,9 @@ public class FileService {
             int floor = cardChoiceNode.get("floor").asInt();
 
             if (!"SKIP".equalsIgnoreCase(pickedCardName)) {
-                Card pickedCard = cardRepository.findByName(removeNumberCardName(pickedCardName));
+                Card pickedCard = cardRepository.findByName(removeNumberCardName(pickedCardName)).orElseThrow(
+                        () -> new CustomException(CARD_NOT_FOUND)
+                );
                 if (pickedCard == null) {
                     throw new IllegalArgumentException("Card not found: " + pickedCardName);
                 }
@@ -185,7 +189,9 @@ public class FileService {
 
             for (JsonNode notPickedNode : cardChoiceNode.get("not_picked")) {
                 String notPickedCardName = notPickedNode.asText();
-                Card notPickedCard = cardRepository.findByName(removeNumberCardName(notPickedCardName));
+                Card notPickedCard = cardRepository.findByName(removeNumberCardName(notPickedCardName)).orElseThrow(
+                        () -> new CustomException(CARD_NOT_FOUND)
+                );
                 if (notPickedCard == null) {
                     throw new IllegalArgumentException("Card not found: " + notPickedCardName);
                 }
