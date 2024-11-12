@@ -87,7 +87,7 @@ public class FileService {
     }
 
     @Transactional
-    public void saveGameData(String play_id, Member member) {
+    public Game saveGameData(String play_id, Member member) {
         //game 데이터 저장
         JsonNode gameData = loadJsonFile(play_id);
         boolean isVictory = gameData.get("victory").asBoolean();
@@ -114,6 +114,7 @@ public class FileService {
         game.setScore(score);
         game.setCharacterType(characterType);
         gameRepository.save(game);
+
 
         //전투 테이블 저장
         JsonNode damageTakenData = gameData.get("damage_taken");
@@ -239,6 +240,7 @@ public class FileService {
                 }
             }
         }
+        return game;
     }
 
     @Transactional

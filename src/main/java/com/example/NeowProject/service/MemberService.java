@@ -23,6 +23,7 @@ public class MemberService {
     public Long join(Member member) {
         validateDuplicatemember(member);
         memberRepository.save(member);
+        initBestRecord(member);
         return member.getId();
     }
 
@@ -40,11 +41,26 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    /**
-     * Member 정보 업데이트 기능 추가 필요
-     */
 
+    @Transactional
+    public void initBestRecord(Member member) {
 
+        for (CharacterType characterType : CharacterType.values()) {
 
+            BestRecord bestRecord = new BestRecord();
+
+            bestRecord.setMember(member);
+            bestRecord.setMaxAscension(0);
+            bestRecord.setMinTime(Integer.MAX_VALUE);
+            bestRecord.setWin(0);
+            bestRecord.setLose(0);
+            bestRecord.setBestScore(0);
+            bestRecord.setCharacterType(characterType);
+
+            bestRecordRepository.save(bestRecord);
+
+        }
+
+    }
 
 }

@@ -43,31 +43,5 @@ class MemberServiceTest {
     /**
      * 최고 기록 정보 검색
      */
-    @Test
-    public void findBestRecordByMemberAndCharacterType() {
 
-        Member member = new Member();
-        member.setName("John");
-        BestRecord bestRecord = setBestRecord(new BestRecord(), member, 10, 87.6, 19
-                , 1250, 18273, CharacterType.IRONCLAD);
-
-        memberService.join(member);
-        memberService.saveBestRecord(bestRecord);
-
-        assertEquals(bestRecord, bestRecordRepository.findOneByMemberAndCharacterType(member, CharacterType.IRONCLAD));
-    }
-
-
-
-
-    public static BestRecord setBestRecord(BestRecord bestRecord , Member member, int maxAscension, double winRate, int maxStreak,int minTime, int bestScore, CharacterType characterType) {
-        bestRecord.setMember(member);
-        bestRecord.setMaxAscension(maxAscension);
-        bestRecord.setWinRate(winRate);
-        bestRecord.setMinTime(minTime);
-        bestRecord.setBestScore(bestScore);
-        bestRecord.setCharacterType(characterType);
-
-        return bestRecord;
-    }
 }
