@@ -1,26 +1,21 @@
 package com.example.NeowProject.service;
 
-import com.example.NeowProject.domain.BestRecord;
-import com.example.NeowProject.domain.CharacterType;
 import com.example.NeowProject.domain.Member;
-import com.example.NeowProject.repository.BestRecordRepository;
 import com.example.NeowProject.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final BestRecordRepository bestRecordRepository;
 
-    public MemberService(MemberRepository memberRepository, BestRecordRepository bestRecordRepository) {
+    public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
-        this.bestRecordRepository = bestRecordRepository;
+
     }
 
     // Member 기능
