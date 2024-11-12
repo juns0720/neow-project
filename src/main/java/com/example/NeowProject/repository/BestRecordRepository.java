@@ -19,35 +19,8 @@ public interface BestRecordRepository extends JpaRepository<BestRecord, Long> {
 
     List<BestRecord> findAllByMember(Member member);
 
-
-    // 최고 ascension 갱신
-    @Modifying
-    @Transactional
-    @Query("UPDATE BestRecord br SET br.maxAscension = :ascension " +
-            "WHERE br.member = :member AND br.characterType = :characterType AND br.maxAscension < :ascension")
-    void updateMaxAscension(@Param("member") Member member, @Param("characterType") CharacterType characterType, @Param("ascension") int ascension);
-
-    // 승률(winRate) 갱신
-    @Modifying
-    @Transactional
-    @Query("UPDATE BestRecord br SET br.winRate = ((br.winRate * :totalGames + :wins) / (:totalGames + 1)) " +
-            "WHERE br.member = :member AND br.characterType = :characterType")
-    void updateWinRate(@Param("member") Member member, @Param("characterType") CharacterType characterType,
-                       @Param("totalGames") double totalGames, @Param("wins") double wins);
-
-    // 최소 시간(minTime) 갱신
-    @Modifying
-    @Transactional
-    @Query("UPDATE BestRecord br SET br.minTime = :time " +
-            "WHERE br.member = :member AND br.characterType = :characterType AND br.minTime > :time")
-    void updateMinTime(@Param("member") Member member, @Param("characterType") CharacterType characterType, @Param("time") int time);
-
-    // 최고 점수(bestScore) 갱신
-    @Modifying
-    @Transactional
-    @Query("UPDATE BestRecord br SET br.bestScore = :score " +
-            "WHERE br.member = :member AND br.characterType = :characterType AND br.bestScore < :score")
-    void updateBestScore(@Param("member") Member member, @Param("characterType") CharacterType characterType, @Param("score") int score);
+    @Query("SELECT b FROM BestRecord b WHERE b.member = :member AND (b.characterType = :characterType OR b.characterType = com.example.NeowProject.domain.CharacterType.ALL)")
+    List<BestRecord> findBestRecordsForUpdate(@Param("member") Member member, @Param("characterType") CharacterType characterType);
 
 
 }

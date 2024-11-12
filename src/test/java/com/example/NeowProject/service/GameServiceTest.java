@@ -26,30 +26,39 @@ class GameServiceTest {
     private GameRepository gameRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private MemberService memberService;
 
     @Test
     void update(){
     Member member = new Member();
-    member.setName("um");
-    memberRepository.save(member);
+    member.setName("am");
+    memberService.join(member);
 
-    Game game = createGame(member, "1352352", true, 50, LocalDateTime.now(), "me", 599, 10, 1500, CharacterType.IRONCLAD);
-    gameRepository.save(game);
+    Game game1 = createGame(member, "1352352", true, 50, LocalDateTime.now(), "me", 599, 10, 1500, CharacterType.IRONCLAD);
+    Game game2 = createGame(member, "14452213", false, 50, LocalDateTime.now(), "me", 450, 10, 1400, CharacterType.IRONCLAD);
+
+    gameRepository.save(game1);
+    gameRepository.save(game2);
 
 
 
 
-    gameService.updateBestRecord(member);
+    gameService.updateBestRecord(member, game1);
+    gameService.updateBestRecord(member, game2);
 
     List<BestRecord> bestRecords = gameService.findBestRecordsByMember(member);
 
 
 
         for (BestRecord bestRecord : bestRecords) {
+            int win = 2;
+            double lose = 1;
+            double total = win + lose;
             System.out.println("캐릭터: " + bestRecord.getCharacterType());
             System.out.println("최소 시간: " + bestRecord.getMinTime());
             System.out.println("최고 점수: " + bestRecord.getBestScore());
-            System.out.println("승률: " + bestRecord.getWinRate());
+            System.out.println("승률: " + win/total);
             System.out.println("-----------------------------------------");
         }
 

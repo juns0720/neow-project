@@ -20,7 +20,9 @@ public class BestRecord {
 
     private int maxAscension;
 
-    private Double winRate;
+    private int win;
+
+    private int lose;
 
     private int minTime;
 
