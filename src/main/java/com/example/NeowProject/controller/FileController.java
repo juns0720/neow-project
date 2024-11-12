@@ -1,8 +1,10 @@
 package com.example.NeowProject.controller;
 
 
+import com.example.NeowProject.domain.Game;
 import com.example.NeowProject.domain.Member;
 import com.example.NeowProject.service.FileService;
+import com.example.NeowProject.service.GameService;
 import com.example.NeowProject.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,9 @@ public class FileController {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private GameService gameService;
+
 
     @CrossOrigin(origins =  "http://localhost:3000")
     @PostMapping("api/runfile/upload")
@@ -26,8 +31,8 @@ public class FileController {
 
         String playId = fileService.saveJsonFile(file);
 
-        fileService.saveGameData(playId, member);
-
+        Game game = fileService.saveGameData(playId, member);
+        gameService.updateBestRecord(member, game);
         return ResponseEntity.ok().build();
     }
 
