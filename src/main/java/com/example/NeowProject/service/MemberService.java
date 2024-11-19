@@ -27,6 +27,19 @@ public class MemberService {
         return member.getId();
     }
 
+    public Optional<Member> login(String id, String password) {
+        Optional<Member> memberOptional = memberRepository.findByUserId(id);
+
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+
+            if (member.getPassword().equals(password)) {
+                return Optional.of(member);
+            }
+        }
+        return Optional.empty();
+    }
+
     private void validateDuplicatemember(Member member) {
         if (memberRepository.findByName(member.getName()).isPresent())
                 throw new IllegalStateException("이미 존재하는 회원입니다.");
