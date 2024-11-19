@@ -24,10 +24,11 @@ public class FileController {
     private GameService gameService;
 
 
+    @PostMapping("api/runfile/upload/{userId}")
     @CrossOrigin(origins =  "http://localhost:3000")
-    @PostMapping("api/runfile/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
-        Member member = memberService.findOneMember(1L);
+    public ResponseEntity<?> uploadFile(@PathVariable("userId")Long userId, @RequestParam("file") MultipartFile file) {
+        Member member = memberService.findOneMember(userId);
+
 
         String playId = fileService.saveJsonFile(file);
 
