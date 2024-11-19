@@ -11,6 +11,7 @@ public enum ErrorCode {
     FILE_NOT_FOUND("JSON file not found", HttpStatus.NOT_FOUND),
     RELIC_NOT_FOUND("Relic not found", HttpStatus.NOT_FOUND),
     GAME_NOT_FOUND("Game not found", HttpStatus.NOT_FOUND),
+    CARD_NOT_FOUND("Card not found", HttpStatus.NOT_FOUND),
 
     FILE_SAVE_FAILED("Failed to save JSON file", HttpStatus.INTERNAL_SERVER_ERROR),
     FILE_READ_FAILED("Failed to read JSON file", HttpStatus.INTERNAL_SERVER_ERROR),
