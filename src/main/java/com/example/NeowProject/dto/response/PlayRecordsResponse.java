@@ -31,6 +31,7 @@ public class PlayRecordsResponse {
         private int ascensionLevel;
 
         private int score;
+
         private String character;
 
         @JsonProperty("final_cards")
@@ -39,4 +40,5 @@ public class PlayRecordsResponse {
         @JsonProperty("final_relics")
         private List<String> finalRelics;
     }
+
 }

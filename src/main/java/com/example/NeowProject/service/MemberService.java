@@ -1,26 +1,21 @@
 package com.example.NeowProject.service;
 
-import com.example.NeowProject.domain.BestRecord;
-import com.example.NeowProject.domain.CharacterType;
 import com.example.NeowProject.domain.Member;
-import com.example.NeowProject.repository.BestRecordRepository;
 import com.example.NeowProject.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final BestRecordRepository bestRecordRepository;
 
-    public MemberService(MemberRepository memberRepository, BestRecordRepository bestRecordRepository) {
+    public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
-        this.bestRecordRepository = bestRecordRepository;
+
     }
 
     // Member 기능
@@ -28,7 +23,21 @@ public class MemberService {
     public Long join(Member member) {
         validateDuplicatemember(member);
         memberRepository.save(member);
+        initBestRecord(member);
         return member.getId();
+    }
+
+    public Optional<Member> login(String id, String password) {
+        Optional<Member> memberOptional = memberRepository.findByUserId(id);
+
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+
+            if (member.getPassword().equals(password)) {
+                return Optional.of(member);
+            }
+        }
+        return Optional.empty();
     }
 
     private void validateDuplicatemember(Member member) {
@@ -45,29 +54,26 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    /**
-     * Member 정보 업데이트 기능 추가 필요
-     */
-
-    //BestRecord 기능
-    /**
-     * 1. 최고 기록 갱신
-     * 2. 최고 기록 찾기
-     */
 
     @Transactional
-    public Long saveBestRecord(BestRecord bestRecord) {
-        bestRecordRepository.save(bestRecord);
-        return bestRecord.getId();
-    }
+    public void initBestRecord(Member member) {
 
-    public BestRecord findBestRecordByMemberAndCharacterType(Member member, CharacterType characterType) {
-        return bestRecordRepository.findOneByMemberAndCharacterType(member, characterType);
-    }
+        for (CharacterType characterType : CharacterType.values()) {
 
-    public List<BestRecord> findBestRecordsByMember(Member member) {
-        return bestRecordRepository.findAllByMember(member);
-    }
+            BestRecord bestRecord = new BestRecord();
 
+            bestRecord.setMember(member);
+            bestRecord.setMaxAscension(0);
+            bestRecord.setMinTime(Integer.MAX_VALUE);
+            bestRecord.setWin(0);
+            bestRecord.setLose(0);
+            bestRecord.setBestScore(0);
+            bestRecord.setCharacterType(characterType);
+
+            bestRecordRepository.save(bestRecord);
+
+        }
+
+    }
 
 }

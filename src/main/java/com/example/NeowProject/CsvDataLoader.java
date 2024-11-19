@@ -5,6 +5,7 @@ import com.example.NeowProject.repository.CardRepository;
 import com.example.NeowProject.repository.EnemyRepository;
 import com.example.NeowProject.repository.MemberRepository;
 import com.example.NeowProject.repository.RelicRepository;
+import com.example.NeowProject.service.MemberService;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class CsvDataLoader implements CommandLineRunner {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private MemberService memberService;
     @Override
     public void run(String... args) throws Exception {
         loadCsvCardData();
@@ -38,7 +41,7 @@ public class CsvDataLoader implements CommandLineRunner {
     private void loadMember() {
         Member member = new Member();
         member.setName("Um");
-        memberRepository.save(member);
+        memberService.join(member);
     }
     private void loadCsvCardData() {
         try (CSVReader reader = new CSVReader(new FileReader(new ClassPathResource("data/card_data.csv").getFile()))) {

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EnemyRepository extends JpaRepository<Enemy, Long> {
 
-    public Enemy findByName(String name);
+    Enemy findByName(String name);
 }
