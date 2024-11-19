@@ -23,7 +23,7 @@ public class Game {
 
     private String gameUUID;
 
-    private boolean isVictory;
+    private boolean victory;
 
     private int finalFloor;
 

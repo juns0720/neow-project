@@ -24,5 +24,5 @@ public class SelectBossRelic {
 
     private int act;
 
-    private boolean isSelect;
+    private boolean select;
 }

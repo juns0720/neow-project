@@ -14,14 +14,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class FileController {
-    @Autowired
-    private FileService fileService;
+    private final FileService fileService;
+    private final MemberService memberService;
+    private final GameService gameService;
 
-    @Autowired
-    private MemberService memberService;
 
-    @Autowired
-    private GameService gameService;
+    public FileController(FileService fileService, MemberService memberService, GameService gameService) {
+        this.fileService = fileService;
+        this.memberService = memberService;
+        this.gameService = gameService;
+
+    }
 
 
     @PostMapping("api/runfile/upload/{userId}")

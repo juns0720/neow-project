@@ -25,7 +25,7 @@ public class SelectBattleRewardCard {
 
     private int floor;
 
-    private boolean isSelect;
+    private boolean select;
 
 
 
