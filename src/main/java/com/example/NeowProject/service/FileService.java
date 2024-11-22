@@ -184,7 +184,7 @@ public class FileService {
                 selectedCard.setGame(game);
                 selectedCard.setCard(pickedCard);
                 selectedCard.setFloor(floor);
-                selectedCard.setSelect(true);
+                selectedCard.setPick(true);
                 selectedCardRewordRepository.save(selectedCard);
             }
 
@@ -201,7 +201,7 @@ public class FileService {
                 unselectedCard.setGame(game);
                 unselectedCard.setCard(notPickedCard);
                 unselectedCard.setFloor(floor);
-                unselectedCard.setSelect(false);
+                unselectedCard.setPick(false);
                 selectedCardRewordRepository.save(unselectedCard);
             }
         }
@@ -231,7 +231,7 @@ public class FileService {
                 selectedRelic.setGame(game);
                 selectedRelic.setRelic(pickedRelic);
                 selectedRelic.setAct(act);
-                selectedRelic.setSelect(true);
+                selectedRelic.setPick(true);
                 selectBossRelicRepository.save(selectedRelic);
 
                 for (JsonNode notPickedNode : bossRelicNode.get("not_picked")) {
@@ -241,7 +241,7 @@ public class FileService {
                     SelectBossRelic unselectedRelic = new SelectBossRelic();
                     unselectedRelic.setGame(game);
                     unselectedRelic.setRelic(notPickedRelic);
-                    unselectedRelic.setSelect(false);
+                    unselectedRelic.setPick(false);
                     selectBossRelicRepository.save(unselectedRelic);
                 }
             }
