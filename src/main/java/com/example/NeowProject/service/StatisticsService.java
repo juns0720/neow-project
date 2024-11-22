@@ -58,7 +58,7 @@ public class StatisticsService {
 
         for (Card card : cards) {
             long totalShowed = selectedCardRewordRepository.countByCard(card);
-            long totalSelected = selectedCardRewordRepository.countByCardAndSelectTrue(card);
+            long totalSelected = selectedCardRewordRepository.countByCardAndPickTrue(card);
             double totalPickedRate = totalShowed == 0 ? 0.0 : (double) totalSelected / totalShowed * 100;
 
             long totalFinalCardCount = finalCardRepository.countByCard(card);
@@ -67,17 +67,17 @@ public class StatisticsService {
 
             // Act1 picked rate
             long act1Total = selectedCardRewordRepository.countByCardAndFloorLessThanEqual(card, 17);
-            long act1Selected = selectedCardRewordRepository.countByCardAndFloorLessThanEqualAndSelectTrue(card, 17);
+            long act1Selected = selectedCardRewordRepository.countByCardAndFloorLessThanEqualAndPickTrue(card, 17);
             double act1PickedRate = act1Total == 0 ? 0.0 : (double) act1Selected / act1Total * 100;
 
             // Act2 picked rate
             long act2Total = selectedCardRewordRepository.countByCardAndFloorBetween(card, 18, 34);
-            long act2Selected = selectedCardRewordRepository.countByCardAndFloorBetweenAndSelectTrue(card, 18, 34);
+            long act2Selected = selectedCardRewordRepository.countByCardAndFloorBetweenAndPickTrue(card, 18, 34);
             double act2PickedRate = act2Total == 0 ? 0.0 : (double) act2Selected / act2Total * 100;
 
             // Act3 picked rate
             long act3Total = selectedCardRewordRepository.countByCardAndFloorGreaterThan(card, 34);
-            long act3Selected = selectedCardRewordRepository.countByCardAndFloorGreaterThanAndSelectTrue(card, 34);
+            long act3Selected = selectedCardRewordRepository.countByCardAndFloorGreaterThanAndPickTrue(card, 34);
             double act3PickedRate = act3Total == 0 ? 0.0 : (double) act3Selected / act3Total * 100;
 
             List<CardDataResponse.ActPickedRate> actPickedRates = List.of(
@@ -100,7 +100,7 @@ public class StatisticsService {
         List<Relic> bossRelicList = relicRepository.findRelicsByRelicType(RelicType.BOSS);
         for (Relic relic : bossRelicList) {
             long totalPicked = selectBossRelicRepository.countByRelic(relic);
-            long totalSelected = selectBossRelicRepository.countByRelicAndSelectTrue(relic);
+            long totalSelected = selectBossRelicRepository.countByRelicAndPickTrue(relic);
             double pickRate = totalPicked == 0 ? 0.0 : (double) totalSelected / totalPicked * 100;
 
             long totalRelicCount = finalRelicRepository.countByRelic(relic);

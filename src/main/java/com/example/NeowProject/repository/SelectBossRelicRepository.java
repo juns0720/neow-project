@@ -11,6 +11,6 @@ public interface SelectBossRelicRepository extends JpaRepository<SelectBossRelic
     void deleteByGame(Game game);
 
     //통계 관련 메소드
-    long countByRelicAndSelectTrue(Relic relic);
+    long countByRelicAndPickTrue(Relic relic);
     long countByRelic(Relic relic);
 }

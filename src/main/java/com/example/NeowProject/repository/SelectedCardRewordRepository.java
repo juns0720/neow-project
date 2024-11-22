@@ -11,12 +11,12 @@ public interface SelectedCardRewordRepository extends JpaRepository<SelectBattle
     void deleteByGame(Game Game);
 
     //통계 관련 메소드들
-    long countByCardAndSelectTrue(Card card);
+    long countByCardAndPickTrue(Card card);
     long countByCard(Card card);
-    long countByCardAndFloorLessThanEqualAndSelectTrue(Card card, int maxFloor);
+    long countByCardAndFloorLessThanEqualAndPickTrue(Card card, int maxFloor);
     long countByCardAndFloorLessThanEqual(Card card, int maxFloor);
-    long countByCardAndFloorBetweenAndSelectTrue(Card card, int minFloor, int maxFloor);
+    long countByCardAndFloorBetweenAndPickTrue(Card card, int minFloor, int maxFloor);
     long countByCardAndFloorBetween(Card card, int minFloor, int maxFloor);
-    long countByCardAndFloorGreaterThanAndSelectTrue(Card card, int minFloor);
+    long countByCardAndFloorGreaterThanAndPickTrue(Card card, int minFloor);
     long countByCardAndFloorGreaterThan(Card card, int minFloor);
 }
