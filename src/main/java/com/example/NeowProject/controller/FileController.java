@@ -28,7 +28,6 @@ public class FileController {
 
 
     @PostMapping("api/runfile/upload/{userId}")
-    @CrossOrigin(origins =  "http://localhost:3000")
     public ResponseEntity<?> uploadFile(@PathVariable("userId")Long userId, @RequestParam("file") MultipartFile file) {
         Member member = memberService.findOneMember(userId);
 
