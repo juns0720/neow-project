@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 public class FileController {
     private final FileService fileService;
@@ -27,16 +29,18 @@ public class FileController {
     }
 
 
-    @PostMapping("api/runfile/upload/{userId}")
-    public ResponseEntity<?> uploadFile(@PathVariable("userId")Long userId, @RequestParam("file") MultipartFile file) {
-        Member member = memberService.findOneMember(userId);
+    @PostMapping("/upload/{userId}")
+    public ResponseEntity<?> uploadFiles(@PathVariable("userId") Long userId, @RequestParam("files") List<MultipartFile> files) {
+        try {
+            // 다중 파일 처리 서비스 호출
+            List<Game> processedGames = fileService.processMultipleFiles(files, userId);
 
-
-        String playId = fileService.saveJsonFile(file);
-
-        Game game = fileService.saveGameData(playId, member);
-        gameService.updateBestRecord(member, game);
-        return ResponseEntity.ok().build();
+            // 성공적으로 처리된 파일 수 응답
+            return ResponseEntity.ok("Processed " + processedGames.size() + " files successfully.");
+        } catch (Exception e) {
+            // 처리 중 에러 발생 시 예외 메시지 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing files: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("api/runfile/delete")
