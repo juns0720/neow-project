@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,7 +20,9 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.example.NeowProject.exception.ErrorCode.*;
@@ -35,9 +39,13 @@ public class FileService {
     private final RelicRepository relicRepository;
     private final FinalRelicRepository finalRelicRepository;
     private final SelectBossRelicRepository selectBossRelicRepository;
+    private final TrainingReadyRepository trainingReadyRepository;
+
+    private final GameService gameService;
+    private final MemberService memberService;
 
     @Autowired
-    public FileService(GameRepository gameRepository, EnemyRepository enemyRepository, BattleRepository battleRepository, CardRepository cardRepository, FinalCardRepository finalCardRepository, SelectedCardRewordRepository selectedCardRewordRepository, RelicRepository relicRepository, FinalRelicRepository finalRelicRepository, SelectBossRelicRepository selectBossRelicRepository) {
+    public FileService(GameRepository gameRepository, EnemyRepository enemyRepository, BattleRepository battleRepository, CardRepository cardRepository, FinalCardRepository finalCardRepository, SelectedCardRewordRepository selectedCardRewordRepository, RelicRepository relicRepository, FinalRelicRepository finalRelicRepository, SelectBossRelicRepository selectBossRelicRepository, GameService gameService, MemberService memberService, TrainingReadyRepository trainingReadyRepository) {
         this.gameRepository = gameRepository;
         this.enemyRepository = enemyRepository;
         this.battleRepository = battleRepository;
@@ -47,6 +55,10 @@ public class FileService {
         this.relicRepository = relicRepository;
         this.finalRelicRepository = finalRelicRepository;
         this.selectBossRelicRepository = selectBossRelicRepository;
+        this.trainingReadyRepository = trainingReadyRepository;
+
+        this.gameService = gameService;
+        this.memberService = memberService;
     }
 
     public String saveJsonFile(MultipartFile file) {
@@ -247,6 +259,54 @@ public class FileService {
             }
         }
         return game;
+    }
+
+    @Transactional
+    public List<Game> processMultipleFiles(List<MultipartFile> files, Long userId) {
+        List<Game> processedGames = new ArrayList<>();
+        String errorLogFilePath = "error_logs.txt"; // 에러 로그 파일 경로
+
+        try {
+            // 1. 회원 정보 가져오기
+            Member member = memberService.findOneMember(userId);
+
+            for (MultipartFile file : files) {
+                try {
+                    processSingleFile(file, member, processedGames);
+                } catch (Exception e) {
+                    // 개별 파일 처리 실패 시 파일 이름만 로그에 기록 후 스킵
+                    System.err.println("Failed to process file: " + (file.getOriginalFilename() == null ? "Unknown" : file.getOriginalFilename()));
+
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(errorLogFilePath, true))) {
+                        writer.write("[" + java.time.LocalDateTime.now() + "] " + (file.getOriginalFilename() == null ? "Unknown" : file.getOriginalFilename()));
+                        writer.newLine();
+                    } catch (IOException ioException) {
+                        System.err.println("Failed to write to error log file: " + ioException.getMessage());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // 전체 작업 실패 시 로그 출력
+            System.err.println("Error processing multiple files: " + e.getMessage());
+        }
+
+        return processedGames;
+    }
+
+    @Transactional(noRollbackFor = Exception.class) // 개별 파일 처리 트랜잭션
+    public void processSingleFile(MultipartFile file, Member member, List<Game> processedGames) throws Exception {
+        // 2. JSON 파일 저장
+        String playId = saveJsonFile(file);
+        // 3. 게임 데이터 저장
+        Game game = saveGameData(playId, member);
+        // 4. 학습 데이터 셋 저장
+        TrainingReady trainingReady = new TrainingReady();
+        trainingReady.setGame(game);
+        trainingReadyRepository.save(trainingReady);
+        // 5. 최고 기록 업데이트
+        gameService.updateBestRecord(member, game);
+        // 6. 처리된 게임 추가
+        processedGames.add(game);
     }
 
     @Transactional
